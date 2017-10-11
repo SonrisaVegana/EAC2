@@ -99,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
                 URL xmlRSS = new URL(url[0]);
                 //Hacer la conexión
                 HttpsURLConnection connection = (HttpsURLConnection) xmlRSS.openConnection();
+                //input y buffer para leer la información
+                byte[] bufferXML = new byte[1024];
             }catch(IOException exception){
-                Log.d("")
+                Log.d("ERR","No ni ha conexió!");
                 return null;
             }
 
