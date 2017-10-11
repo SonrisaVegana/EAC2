@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
     //declarar URL y ubicación para datos sin conexión.
@@ -86,10 +91,19 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
+        //Aqui realizamos la conexión
         @Override
         protected Void doInBackground(String... url) {
-            return null;
+            try {
+                //URL  a procesar
+                URL xmlRSS = new URL(url[0]);
+                //Hacer la conexión
+                HttpsURLConnection connection = (HttpsURLConnection) xmlRSS.openConnection();
+            }catch(IOException exception){
+                Log.d("")
+                return null;
+            }
+
         }
 
         @Override
