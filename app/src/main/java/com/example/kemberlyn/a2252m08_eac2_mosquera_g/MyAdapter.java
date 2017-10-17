@@ -1,5 +1,6 @@
 package com.example.kemberlyn.a2252m08_eac2_mosquera_g;
 
+import com.example.kemberlyn.a2252m08_eac2_mosquera_g.MarcaXMLParser.Entrada;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,20 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * Mostrar contenido en la pantalla principal de la app (mainActivity)
  * Created by Kemberlyn on 08/10/2017.
  */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ElMeuViewHolder> {
     //variables
-    private ArrayList<ItemFila> items;
+    private List<Entrada> items;
     private Context context;
 
     //Constructor
-    public MyAdapter(ArrayList<ItemFila> items, Context context){
+    public MyAdapter(List<Entrada> items, Context context){
         this.items = items;
         this.context = context;
     }
@@ -57,8 +58,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ElMeuViewHolder> {
      */
     @Override
     public void onBindViewHolder(ElMeuViewHolder holder, int position) {
-        holder.texto.setText(items.get(position).getTexto());
-        holder.imagen.setImageResource(items.get(position).getId_imagen());
+        holder.texto.setText(items.get(position).getTitol());
+       // holder.imagen.setImageResource(items.get(position).getThumbnail());
 
     }
 
