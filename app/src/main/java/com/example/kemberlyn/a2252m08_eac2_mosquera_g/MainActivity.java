@@ -1,4 +1,5 @@
 package com.example.kemberlyn.a2252m08_eac2_mosquera_g;
+import com.example.kemberlyn.a2252m08_eac2_mosquera_g.DescargarDades;
 
 import com.example.kemberlyn.a2252m08_eac2_mosquera_g.MarcaXMLParser.Entrada;
 
@@ -7,38 +8,20 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
     //declarar URL y ubicación para datos sin conexión.
@@ -54,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rView;
 
     private ProgressBar progressBar;
-    private List<Entrada> entrades;
+//    private List<Entrada> entrades;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,9 +130,11 @@ public class MainActivity extends AppCompatActivity {
         //Aqui realizamos la conexión y cargamos el xml
         @Override
         protected String doInBackground(String... url) {
+            //Instancia a la clase aux para la descarga del XML
+            DescargarDades descargarDades = new DescargarDades();
 
             try {
-                return carregaXMLdelaXarxa(url[0]);
+                return descargarDades.carregaXMLdelaXarxa(url[0]);
             } catch (IOException e) {
                 return "Error de Connexió";
             } catch (XmlPullParserException e) {
@@ -179,87 +166,87 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Descarrega XML de marca.com
-     *
-     * @param urlString
-     * @return htmlString
-     * @throws XmlPullParserException
-     * @throws IOException
-     */
-    private String carregaXMLdelaXarxa(String urlString) throws XmlPullParserException, IOException {
-        InputStream stream = null;
-        //Creem una instancia de l'analitzador
-        MarcaXMLParser analitzador = new MarcaXMLParser();
-
-        //Llista de entrades de noticies
-        entrades = new ArrayList<Entrada>();
-
-        //Cadena on construirem el codi HTML que mostrara el widget webView
-        StringBuilder htmlString = new StringBuilder();
-
-
-        try {
-            //Obrim la connexio);
-            stream = ObreConnexioHTTP(urlString);
-
-            //Obtenim la llista d'entrades a partir de l'stream de dades
-            entrades = analitzador.analitza(stream);
-        } catch (Exception e) {
-            //Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-
-            e.printStackTrace();
-        } finally {
-            //Tanquem l'stream una vegada hem terminat de treballar amb ell
-            if (stream != null) {
-                stream.close();
-            }
-        }
-
-        //analitzador.parse() retorna una llista (entrades) d'entrades de noticies (objectes
-        //de la classe Entrada. Cada objecte representa un post de l'XML Feed. Ara es processen
-        //les entrades de la llista per crear un codi HTML. Per cada entrada es crea un enllaç
-        //a la noticia completa
-
-        //Si tenim noticies
-        if (entrades != null) {
-            return "Ok";
-
-        }else{
-            return "NO";
-        }
-
-    }
-
-
-    //Metodos auxiliares para descargar RSS
-    private BufferedInputStream ObreConnexioHTTP(String adrecaURL) throws IOException {
-        BufferedInputStream in = null;
-        int resposta;
-
-        URL url = new URL(adrecaURL);
-        URLConnection connexio = url.openConnection();
-
-        if (!(connexio instanceof HttpURLConnection))
-            throw new IOException("No connexió HTTP");
-
-        try {
-            HttpURLConnection httpConn = (HttpURLConnection) connexio;
-            httpConn.setAllowUserInteraction(false);
-            httpConn.setInstanceFollowRedirects(true);
-            httpConn.setRequestMethod("GET");
-            httpConn.connect();
-
-            resposta = httpConn.getResponseCode();
-            if (resposta == HttpURLConnection.HTTP_OK) {
-                in = new BufferedInputStream(httpConn.getInputStream());
-            }
-        } catch (Exception ex) {
-            throw new IOException("Error connectant");
-        }
-
-        return in;
-    }
+//    /**
+//     * Descarrega XML de marca.com
+//     *
+//     * @param urlString
+//     * @return htmlString
+//     * @throws XmlPullParserException
+//     * @throws IOException
+//     */
+//    private String carregaXMLdelaXarxa(String urlString) throws XmlPullParserException, IOException {
+//        InputStream stream = null;
+//        //Creem una instancia de l'analitzador
+//        MarcaXMLParser analitzador = new MarcaXMLParser();
+//
+//        //Llista de entrades de noticies
+//        entrades = new ArrayList<Entrada>();
+//
+//        //Cadena on construirem el codi HTML que mostrara el widget webView
+//        StringBuilder htmlString = new StringBuilder();
+//
+//
+//        try {
+//            //Obrim la connexio);
+//            stream = ObreConnexioHTTP(urlString);
+//
+//            //Obtenim la llista d'entrades a partir de l'stream de dades
+//            entrades = analitzador.analitza(stream);
+//        } catch (Exception e) {
+//            //Toast.makeText(getBaseContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+//
+//            e.printStackTrace();
+//        } finally {
+//            //Tanquem l'stream una vegada hem terminat de treballar amb ell
+//            if (stream != null) {
+//                stream.close();
+//            }
+//        }
+//
+//        //analitzador.parse() retorna una llista (entrades) d'entrades de noticies (objectes
+//        //de la classe Entrada. Cada objecte representa un post de l'XML Feed. Ara es processen
+//        //les entrades de la llista per crear un codi HTML. Per cada entrada es crea un enllaç
+//        //a la noticia completa
+//
+//        //Si tenim noticies
+//        if (entrades != null) {
+//            return "Ok";
+//
+//        }else{
+//            return "NO";
+//        }
+//
+//    }
+//
+//
+//    //Metodos auxiliares para descargar RSS
+//    private BufferedInputStream ObreConnexioHTTP(String adrecaURL) throws IOException {
+//        BufferedInputStream in = null;
+//        int resposta;
+//
+//        URL url = new URL(adrecaURL);
+//        URLConnection connexio = url.openConnection();
+//
+//        if (!(connexio instanceof HttpURLConnection))
+//            throw new IOException("No connexió HTTP");
+//
+//        try {
+//            HttpURLConnection httpConn = (HttpURLConnection) connexio;
+//            httpConn.setAllowUserInteraction(false);
+//            httpConn.setInstanceFollowRedirects(true);
+//            httpConn.setRequestMethod("GET");
+//            httpConn.connect();
+//
+//            resposta = httpConn.getResponseCode();
+//            if (resposta == HttpURLConnection.HTTP_OK) {
+//                in = new BufferedInputStream(httpConn.getInputStream());
+//            }
+//        } catch (Exception ex) {
+//            throw new IOException("Error connectant");
+//        }
+//
+//        return in;
+//    }
 
 }
 
